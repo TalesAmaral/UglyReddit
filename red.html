@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="author" content="Tales da Silva Amaral">
+		<meta name="description" content="">
+		<style>
+			img{
+				max-width: 400px;
+				max-height: 400px;
+			}
+		</style>
+
+		<!-- the below three lines are a fix to get HTML5 semantic elements working in old versions of Internet Explorer-->
+		<!--[if lt IE 9]>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<label for="sub">
+			Type the sub
+			<input id="sub" name="sub" type="text">
+		</label>
+
+		<button onclick="getData()"> Search </button>
+		<article id = "mural">
+
+		</article>
+		<script>
+			function getData(){
+				const subName = document.getElementById("sub").value;
+				const link = 'https://www.reddit.com/r/'+subName+'/top.json?t=day';
+				var mural = document.getElementById("mural");
+				while (mural.firstChild) {
+					mural.firstChild.remove()
+				}
+				fetch(link)
+					.then(function(res){
+							return res.json();
+							})
+				.then(function(res){
+						const posts = res.data.children;
+						const title = document.createElement("h1");
+						const titleText = document.createTextNode("Posts from "+ subName+":");
+						title.appendChild(titleText);
+						mural.appendChild(title);
+
+						posts.forEach( post => {
+								let content = post.data;
+								let section = document.createElement("section");
+								let postTitle = document.createElement("h2"); 
+								let titleNode = document.createTextNode(content.title);
+								postTitle.appendChild(titleNode);
+
+								let postText = document.createElement("p"); 
+								let textNode = document.createTextNode(content.selftext);
+										
+								section.appendChild(postTitle);
+								section.appendChild(postText);
+								postText.appendChild(textNode);
+								if (content.post_hint == "image"){
+									let postImage = document.createElement("img"); 
+									postImage.src = content.url;
+									section.appendChild(postImage);
+								} else if (content.post_hint ==	"hosted:video"){
+									let postVideo = document.createElement("video");
+									let source = document.createElement("source"); 
+									source.src = content.media.reddit_video.fallback_url;
+									postVideo.appendChild(source);
+									postVideo.controls = true;
+									section.appendChild(postVideo);
+								}
+
+								mural.appendChild(section);
+								});
+
+
+
+
+
+				})
+				.catch(function(err){
+						console.log(err);
+						});
+			}
+		</script>
+	</body>
+</html>
