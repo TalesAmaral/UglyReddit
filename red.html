@@ -29,7 +29,7 @@
 		<script>
 		function getData(){
 			const subName = document.getElementById("sub").value;
-			const link = 'https://www.reddit.com/r/'+subName+'/top.json?t=day';
+			const link = 'https://www.reddit.com/r/'+subName+'/top.json?t=day&limit=10';
 			var mural = document.getElementById("mural");
 			while (mural.firstChild) {
 				mural.firstChild.remove()
