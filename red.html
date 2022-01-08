@@ -66,7 +66,7 @@
 
 							section.appendChild(postTitle);
 							section.appendChild(postText);
-							if (content.post_hint == "image"){
+							if (content.post_hint == "image" || content.domain =="i.redd.it"){
 							let postImage = document.createElement("img"); 
 							postImage.src = content.url;
 							section.appendChild(postImage);
